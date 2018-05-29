@@ -52,13 +52,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::put('users/{user}', 'UserController@update')->name('users.update');
     
     Route::delete('users/{user}', 'UserController@destroy')->name('users.destroy');
-    Route::resource("departments","DepartmentController");
-    Route::resource("categories","CategoryController");
-    Route::resource('leaves', 'LeaveController');
-    Route::resource('statuses', 'StatusController');
-    Route::resource('work_types', 'WorkTypeController');
-    Route::get('shift', 'UserController@index')->name('shift');
-    Route::get('employee', 'UserController@index')->name('employee');
+    Route::resource("creditdebits","CreditDebitController");
 });
 
 
