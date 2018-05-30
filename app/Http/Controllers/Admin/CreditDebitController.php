@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\CreditDebit;
 use Auth;
 use App\Http\Requests\StoreCreditDebit;
+use Illuminate\Support\Facades\Input;
 
 class CreditDebitController extends Controller {
 
@@ -16,9 +17,13 @@ class CreditDebitController extends Controller {
 	 */
 	public function index()
 	{
-		$creditdebits = CreditDebit::orderBy('id', 'asc')->paginate(10);
+		
+		$creditdebits = CreditDebit::where('type', $_GET['type'])->orderBy('id', 'asc')->paginate(10);
 
-		return view('admin.creditdebits.index', compact('creditdebits'));
+		$variables = [
+						'creditdebits' => $creditdebits->appends(Input::except('page')),
+                     ];
+		return view('admin.creditdebits.index', $variables);
 	}
 
 	/**
@@ -49,9 +54,12 @@ class CreditDebitController extends Controller {
 		$creditdebit->photo = $request->input("photo");
 		$creditdebit->type = $request->input("type");
 		$creditdebit->user_id = Auth::user()->id;
+		if ($request->hasFile('photo')) {
+			$creditdebit->photo 	= $this->fileUpload($request->only('photo'), 'photo');
+		}
 		$creditdebit->save();
 
-		return redirect()->route('admin.creditdebits.index')->with('message', 'Item created successfully.');
+		return redirect()->route('admin.creditdebits.index', ['type' => $creditdebit->type])->with('message', 'Item created successfully.');
 	}
 
 	/**
@@ -76,7 +84,9 @@ class CreditDebitController extends Controller {
 	public function edit($id)
 	{
 		$creditdebit = CreditDebit::findOrFail($id);
-
+		if($creditdebit->user_id != Auth::user()->id){
+			abort(404, 'Yor are not authorized to page access'); 
+		}
 		return view('admin.creditdebits.edit', compact('creditdebit'));
 	}
 
@@ -99,11 +109,13 @@ class CreditDebitController extends Controller {
 		$creditdebit->photo = $request->input("photo");
 		$creditdebit->type = $request->input("type");
 		$creditdebit->user_id = Auth::user()->id;
+		if ($request->hasFile('photo')) {
+			$creditdebit->photo 	= $this->fileUpload($request->only('photo'), 'photo');
+		}
 		$creditdebit->save();
 
-		$creditdebit->save();
 
-		return redirect()->route('admin.creditdebits.index')->with('message', 'Item updated successfully.');
+		return redirect()->route('admin.creditdebits.index', ['type' => $creditdebit->type])->with('message', 'Item updated successfully.');
 	}
 
 	/**
@@ -115,9 +127,35 @@ class CreditDebitController extends Controller {
 	public function destroy($id)
 	{
 		$creditdebit = CreditDebit::findOrFail($id);
+		$type = $creditdebit->type;
+		if($creditdebit->user_id != Auth::user()->id){
+			abort(404, 'Yor are not authorized to page access'); 
+		}
 		$creditdebit->delete();
 
-		return redirect()->route('admin.creditdebits.index')->with('message', 'Item deleted successfully.');
+		return redirect()->route('admin.creditdebits.index', ['type' => $type])->with('message', 'Item deleted successfully.');
 	}
+	public function custom()
+	{
+		
+	}
+
+	private function fileUpload($file, $fileVarName)
+    {
+        $destinationPath = public_path(). '/uploads/';
+        $fileExtenstion = \File::extension($file[$fileVarName]->getClientOriginalName());
+        $filename = strtotime("now").".".$fileExtenstion;
+        $file[$fileVarName]->move($destinationPath, $filename);
+        return $filename;
+    }
+
+    private function fileUploadWithName($file, $fileVarName, $name)
+    {
+        $destinationPath = public_path(). '/uploads/';
+        $fileExtenstion = \File::extension($file[$fileVarName]->getClientOriginalName());
+        $filename = $name.'_'.strtotime("now").".".$fileExtenstion;
+        $file[$fileVarName]->move($destinationPath, $filename);
+        return $filename;
+    }
 
 }

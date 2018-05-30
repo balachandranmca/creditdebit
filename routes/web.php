@@ -52,6 +52,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::put('users/{user}', 'UserController@update')->name('users.update');
     
     Route::delete('users/{user}', 'UserController@destroy')->name('users.destroy');
+
+    Route::get('creditdebits/custom', 'CreditDebitController@custom')->name('creditdebits.custom');
     Route::resource("creditdebits","CreditDebitController");
 });
 

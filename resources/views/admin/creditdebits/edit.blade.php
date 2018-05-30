@@ -10,14 +10,14 @@
 
     <div class="row margin-top-30">
         <div class="col-md-8 center-margin">
-           <form action="{{ route('admin.creditdebits.update', $creditdebit->id) }}" method="POST">
+           <form action="{{ route('admin.creditdebits.update', $creditdebit->id) }}" method="POST" enctype="multipart/form-data">
                 <input type="hidden" name="_method" value="PUT">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <div class="row">
                     <div class="col-md-12 col-sm-12 col-xs-12">
                         <div class="x_panel">
                             <div class="x_title">
-                                <h2>Create Debits Update Form</h2>
+                                <h2>{{$creditdebit->type}} Update Form</h2>
                                 <ul class="nav navbar-right">
                                 <li class="cursor-pointer"><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                 </li>
@@ -64,21 +64,22 @@
                                             <span class="help-block">{{ $errors->first("nowtime") }}</span>
                                         @endif
                                     </div>
-
+                                    
                                     <div class="form-group @if($errors->has('photo')) has-error @endif">
-                                        <label for="photo-field">Time</label>
+                                        <label for="photo-field">Photo</label>
                                         <input type="file" id="photo-field" name="photo" class="form-control"/>
                                         @if($errors->has("photo"))
                                             <span class="help-block">{{ $errors->first("photo") }}</span>
                                         @endif
+                                        <img style="width: 150px;height: 150px;" src="{{ asset('uploads')}}/{{ $creditdebit->photo }}">
                                     </div>
 
-                                    <input type="hidden" name="type" class="form-control" value="credit"/>
+                                    <input type="hidden" name="type" class="form-control" value="{{$creditdebit->type}}"/>
                                     
 
                                     <div class="well well-sm margin-top-50">
-                                        <button type="submit" class="btn btn-primary btn-round btn-sm">Update Credit</button>
-                                        <a class="btn btn-link pull-right" href="{{ route('admin.creditdebits.index') }}"><i class="glyphicon glyphicon-backward"></i> Back</a>
+                                        <button type="submit" class="btn btn-primary btn-round btn-sm">Update {{$creditdebit->type}}</button>
+                                        <a class="btn btn-link pull-right" href="{{ route('admin.creditdebits.index') }}?type={{$creditdebit->type}}"><i class="glyphicon glyphicon-backward"></i> Back</a>
                                     </div>
                                 
                         </div>

@@ -29,6 +29,7 @@ class StoreCreditDebit extends FormRequest
             'amount' => 'required',
             'nowdate' => 'required',
             'type' => 'required',
+            'photo' => 'sometimes|required|mimes:jpeg,png',
         ];
     }
 }

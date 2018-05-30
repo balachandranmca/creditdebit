@@ -35,9 +35,21 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('admin.creditdebits.index') }}">
+                        <a href="{{ route('admin.creditdebits.index') }}?type=credit">
                             <i class="fa fa-home" aria-hidden="true"></i>
                             Credit List
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.creditdebits.index') }}?type=debit">
+                            <i class="fa fa-home" aria-hidden="true"></i>
+                            Debit List
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.creditdebits.custom') }}">
+                            <i class="fa fa-home" aria-hidden="true"></i>
+                            Search
                         </a>
                     </li>
                     <li>

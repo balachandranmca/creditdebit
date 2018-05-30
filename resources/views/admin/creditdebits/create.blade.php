@@ -1,6 +1,6 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Department Create Form')
+@section('title', "Create Form")
 
 @section('content')
 
@@ -10,14 +10,14 @@
 
     <div class="row margin-top-30">
         <div class="col-md-8 center-margin">
-            <form class="form-horizontal form-label-left" action="{{ route('admin.creditdebits.store') }}" method="POST">
+            <form class="form-horizontal form-label-left" action="{{ route('admin.creditdebits.store') }}" method="POST"  enctype="multipart/form-data">
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
                     <div class="row">
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <div class="x_panel">
                                 <div class="x_title">
-                                    <h2>CREDIT DEBIT Create Form</h2>
+                                    <h2>{{strtoupper($_GET['type'])}} Create Form</h2>
                                     <ul class="nav navbar-right">
                                     <li class="cursor-pointer"><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                     </li>
@@ -66,18 +66,18 @@
                                     </div>
 
                                     <div class="form-group @if($errors->has('photo')) has-error @endif">
-                                        <label for="photo-field">Time</label>
+                                        <label for="photo-field">Photo</label>
                                         <input type="file" id="photo-field" name="photo" class="form-control" value="{{ old("photo") }}"/>
                                         @if($errors->has("photo"))
                                             <span class="help-block">{{ $errors->first("photo") }}</span>
                                         @endif
                                     </div>
 
-                                    <input type="hidden" name="type" class="form-control" value="credit"/>
+                                    <input type="hidden" name="type" class="form-control" value="{{$_GET['type']}}"/>
                                     
 
                                     <div class="well well-sm margin-top-50">
-                                        <button type="submit" class="btn btn-primary btn-round btn-sm">Create Credit</button>
+                                        <button type="submit" class="btn btn-primary btn-round btn-sm">Create {{$_GET['type']}}</button>
                                         <a class="btn btn-link pull-right" href="{{ route('admin.creditdebits.index') }}"><i class="glyphicon glyphicon-backward"></i> Back</a>
                                     </div>
                                     
