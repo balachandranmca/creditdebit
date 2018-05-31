@@ -7,6 +7,7 @@ use App\CreditDebit;
 use Auth;
 use App\Http\Requests\StoreCreditDebit;
 use Illuminate\Support\Facades\Input;
+use App\Models\Auth\User\User;
 
 class CreditDebitController extends Controller {
 
@@ -17,12 +18,20 @@ class CreditDebitController extends Controller {
 	 */
 	public function index()
 	{
-		
-		$creditdebits = CreditDebit::where('type', $_GET['type'])->orderBy('id', 'asc')->paginate(10);
+		$creditdebits = CreditDebit::where('type', $_GET['type']);
+		$users = User::all();
+		if(isset($_GET['users_id'])){
+			$creditdebits = $creditdebits->where('user_id', $_GET['users_id'])->whereBetween('nowdate', [$_GET['from_date'], $_GET['to_date']]);
+		}
+		$totalAmount = $creditdebits->sum('amount');
+		$creditdebits = $creditdebits->orderBy('id', 'asc')->paginate(1);
 
 		$variables = [
 						'creditdebits' => $creditdebits->appends(Input::except('page')),
-                     ];
+						'users' => $users,
+						'totalAmount' => $totalAmount
+					 ];
+					 
 		return view('admin.creditdebits.index', $variables);
 	}
 
@@ -135,9 +144,13 @@ class CreditDebitController extends Controller {
 
 		return redirect()->route('admin.creditdebits.index', ['type' => $type])->with('message', 'Item deleted successfully.');
 	}
+
 	public function custom()
 	{
-		
+		dd();
+		$creditdebit = CreditDebit::findOrFail($id);
+
+		return view('admin.creditdebits.show', compact('creditdebit'));
 	}
 
 	private function fileUpload($file, $fileVarName)

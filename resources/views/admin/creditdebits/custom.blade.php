@@ -18,8 +18,8 @@
                     <select id = 
                     "category_id" class="form-control" name="category_id" required>
                         <option value="">Select any one Category...</option>
-                        @foreach($categories as $category)
-                            <option value="{{$category->id}}">{{$category->name}}</option>
+                        @foreach($users as $user)
+                            <option value="{{$user->id}}">{{$user->name}}</option>
                         @endforeach
                     </select>
                 </div>
