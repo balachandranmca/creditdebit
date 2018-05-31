@@ -1,10 +1,10 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Credit Debit List')
 
 @section('content')
     <div class="page-header clearfix">
     </div>
+    <h3>{{strtoupper($_GET['type'])}} List</h3>
     <h1>
         <a class="btn btn-success pull-right" href="{{ route('admin.creditdebits.create') }}?type={{$_GET['type']}}">
             <i class="glyphicon glyphicon-plus"></i> Create
